@@ -1,0 +1,33 @@
+.main-page {
+  padding: 1em;
+}
+
+.character-card {
+  background-color: #243142;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.filters {
+  width: 100%;
+  display: flex;
+  gap: 1em;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.filter {
+  background-color: #384d67;
+  padding: 15px;
+  border-radius: 8px;
+}

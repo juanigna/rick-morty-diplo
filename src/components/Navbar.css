@@ -1,0 +1,20 @@
+.navbar {
+  background-color: #384d67;
+  padding: 1em;
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1em;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 1em;
+}
+
+.nav-buttons a {
+  background-color: #2f3f52;
+  padding: 1em;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #b1f0dc;
+}
