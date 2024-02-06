@@ -5,6 +5,7 @@ import "./Characters.css"
 export default function Characters() {
     const [characters, setCharacters] = useState([])
     const [filters, setFilters] = useState([])
+    const [Error, setError] = useState("")
 
     const getCharacters = async () => {
         const res = await fetch('https://rickandmortyapi.com/api/character')
@@ -15,7 +16,6 @@ export default function Characters() {
     useEffect(() => {
         (async () => {
             if (filters.length === 0) {
-
                 const characters = await getCharacters()
                 if (characters) {
                     setCharacters(characters.results)
@@ -42,8 +42,8 @@ export default function Characters() {
                 if (characters.length > 0) {
                     if (shouldFetch(filters)) {
                         const res = await fetch(`https://rickandmortyapi.com/api/character?${filters.join('&')}`)
-                        console.log(res)
                         const data = await res.json()
+                        setError("")
                         setCharacters(data.results)
                     }
                 }
@@ -57,14 +57,17 @@ export default function Characters() {
         if (checked) {
             setFilters(prevFilters => {
                 if (!prevFilters.some(filter => filter.startsWith(value.split('=')[0]))) {
+                    setError(null);
                     return [...prevFilters, value];
-                }
+                } else {
+                    setError('Two filters of the same type are already checked.');
                 return prevFilters;
+                }
             });
         } else {
             setFilters(prevFilters => prevFilters.filter(filter => filter !== value));
+            setError(null);
         }
-
     };
 
     return (
@@ -83,7 +86,7 @@ export default function Characters() {
                     <label>Female</label>
                 </div>
                 <div className="filter">
-                    <input type="checkbox" role="switch" value={"gender=Male"} onChange={handleChange} />
+                    <input type="checkbox" role="switch" value={"gender=male"} onChange={handleChange} />
                     <label>Male</label>
                 </div>
                 <div className="filter">
@@ -92,8 +95,9 @@ export default function Characters() {
                 </div>
 
             </div>
+
             {
-                characters &&
+                !Error ?
                 <div className="card-container">
                     {characters.map((data, i) => (
                         <div key={i} className="character-card">
@@ -102,7 +106,10 @@ export default function Characters() {
                             <button>Know more...</button>
                         </div>
                     ))}
-                </div>
+                    </div> :
+                    <div>
+                        <p>{Error}</p>
+                    </div>
             }
         </main>
     )
