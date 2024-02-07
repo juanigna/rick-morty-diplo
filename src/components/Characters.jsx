@@ -13,19 +13,10 @@ export default function Characters() {
         return data
     }
 
-    useEffect(() => {
-        (async () => {
-            if (filters.length === 0) {
-                const characters = await getCharacters()
-                if (characters) {
-                    setCharacters(characters.results)
-                }
-            }
-        })();
-    }, [filters])
+
 
     function shouldFetch(filters) {
-        const availableFilters = ["name", "status", "gender"];
+        const availableFilters = ["status", "gender"];
         for (const filter of filters) {
             const [key] = filter.split('=');
             if (availableFilters.includes(key)) {
@@ -35,37 +26,46 @@ export default function Characters() {
         return false;
     }
 
+
     useEffect(() => {
-        if (filters.length > 0) {
+
 
             (async () => {
                 if (characters.length > 0) {
                     if (shouldFetch(filters)) {
+                        console.log(filters)
                         const res = await fetch(`https://rickandmortyapi.com/api/character?${filters.join('&')}`)
                         const data = await res.json()
                         setError("")
                         setCharacters(data.results)
                     }
+                } else {
+                    const characters = await getCharacters()
+                    if (characters) {
+                        setCharacters(characters.results)
+                    }
                 }
             })();
-        }
-    }, [filters])
+
+
+    }, [filters, characters.length])
 
     const handleChange = event => {
         const { value, checked } = event.target;
+        const filterKey = value.split('=')[0];
 
         if (checked) {
             setFilters(prevFilters => {
-                if (!prevFilters.some(filter => filter.startsWith(value.split('=')[0]))) {
+                if (!prevFilters.some(filter => filter.startsWith(filterKey))) {
                     setError(null);
                     return [...prevFilters, value];
                 } else {
                     setError('Two filters of the same type are already checked.');
-                return prevFilters;
+                    return prevFilters;
                 }
             });
         } else {
-            setFilters(prevFilters => prevFilters.filter(filter => filter !== value));
+            setFilters(prevFilters => prevFilters.filter(filter => !filter.startsWith(filterKey)));
             setError(null);
         }
     };
@@ -74,23 +74,23 @@ export default function Characters() {
         <main className="main-page">
             <div className="filters">
                 <div className="filter">
-                    <input type="checkbox" role="switch" value={"status=alive"} onChange={handleChange} />
+                    <input type="checkbox" role="radio" value={"status=alive"} onChange={handleChange} />
                     <label>Character Alive</label>
                 </div>
                 <div className="filter">
-                    <input type="checkbox" role="switch" value={"status=dead"} onChange={handleChange} />
+                    <input type="checkbox" role="radio" value={"status=dead"} onChange={handleChange} />
                     <label>Character Dead</label>
                 </div>
                 <div className="filter">
-                    <input type="checkbox" role="switch" value={"gender=female"} onChange={handleChange} />
+                    <input type="checkbox" role="radio" value={"gender=female"} onChange={handleChange} />
                     <label>Female</label>
                 </div>
                 <div className="filter">
-                    <input type="checkbox" role="switch" value={"gender=male"} onChange={handleChange} />
+                    <input type="checkbox" role="radio" value={"gender=male"} onChange={handleChange} />
                     <label>Male</label>
                 </div>
                 <div className="filter">
-                    <input type="checkbox" role="switch" value={"status=unknown"} onChange={handleChange} />
+                    <input type="checkbox" role="radio" value={"status=unknown"} onChange={handleChange} />
                     <label>Origin Unknown</label>
                 </div>
 
