@@ -9,9 +9,66 @@
   padding: 20px;
   transition: transform 0.3s ease;
 }
+
+.card-header {
+  display: flex;
+  flex-direction: row; /* Change to row to enable side-by-side layout */
+}
+
+.card-header > div {
+  flex: 1; /* Each div takes up equal space */
+  margin-right: 10px; /* Add some spacing between the columns */
+}
+
+.card-header .info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-self: start;
+  margin-top: 10px;
+}
+
+
+.info-data{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+hr{
+  width: 100%;
+  opacity: 40%;
+}
+.info-row{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  gap: 1em;
+  background-color: #58759b;
+  margin-bottom: 1em;
+  padding: 10px;
+}
+
+
+
+.card-header .info p {
+  margin: 0;
+}
+
+.card-header .info button {
+  align-self: flex-end; /* Align close button to the right */
+}
+
+.show-info .info {
+  display: block;
+}
+
 .card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 20px;
   justify-items: center;
 }

@@ -6,14 +6,28 @@ export default function Characters() {
     const [characters, setCharacters] = useState([])
     const [filters, setFilters] = useState([])
     const [Error, setError] = useState("")
+    const [showInfo, setShowInfo] = useState(false)
+    const [moreInfo, setMoreInfo] = useState({})
+
+    console.log(characters)
+    const handleOnChangeInfo = (id)  => {
+        setShowInfo(true)
+        const res = characters.filter(character => character.id === id)
+        if (res.length > 0) {
+            setShowInfo(true)
+            setMoreInfo(res[0])
+            setError("")
+        } else {
+            setError("No se encontro el personaje")
+            setShowInfo(false)
+        }
+    } 
 
     const getCharacters = async () => {
         const res = await fetch('https://rickandmortyapi.com/api/character')
         const data = await res.json()
         return data
     }
-
-
 
     function shouldFetch(filters) {
         const availableFilters = ["status", "gender"];
@@ -26,10 +40,7 @@ export default function Characters() {
         return false;
     }
 
-
     useEffect(() => {
-
-
             (async () => {
                 if (characters.length > 0) {
                     if (shouldFetch(filters)) {
@@ -101,9 +112,42 @@ export default function Characters() {
                 <div className="card-container">
                     {characters.map((data, i) => (
                         <div key={i} className="character-card">
-                            <img src={data.image} alt={data.name} />
-                            <p>{data.name}</p>
-                            <button>Know more...</button>
+                            <div className="card-header">
+                                <div>
+                                    
+                                    <img src={data.image} alt={data.name} />
+                                    <p>{data.name}</p>
+                                </div>
+                                {
+                                showInfo && moreInfo.id === data.id &&
+                                <div className="info">
+                                    <button onClick={() => setShowInfo(false)}>✖️</button>
+                                    <div className="info-data">
+                                        
+                                        <div className="info-row">
+                                            <p>Character Status💫</p>
+                                            <p>{data.status}</p>
+                                        </div>
+                                        <hr />
+                                        <div className="info-row">
+                                            <p>Species🦀</p>
+                                            <p>{data.species}</p>
+                                        </div>
+                                        <hr />
+                                        <div className="info-row">
+                                            <p>Origin🌏</p>
+                                            <p>{data.origin.name}</p>
+                                        </div>
+                                        <hr />
+                                        <div className="info-row">
+                                            <p>Gender😬</p>
+                                            <p>{data.gender}</p>
+                                        </div>
+                                    </div>
+                                </div> 
+                            }
+                            </div>
+                            <button onClick={() => handleOnChangeInfo(data.id)}>Know more...</button>
                         </div>
                     ))}
                     </div> :
